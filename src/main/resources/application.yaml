@@ -1,0 +1,23 @@
+server:
+  port: 8090
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/testdb02?useSSL=false
+    username: root
+    password: 0909
+  data:
+    redis:
+      cluster:
+        nodes: 127.0.0.1:7000,127.0.0.1:7001,127.0.0.1:7002,127.0.0.1:7003,127.0.0.1:7004,127.0.0.1:7005
+        max-redirects: 3
+      lettuce:
+        pool:
+          max-idle: 16
+          max-active: 32
+          min-idle: 8
+sa-token:
+  token-name: satoken
+  jwt-secret-key: zxcvbnm
+  is-log: true
