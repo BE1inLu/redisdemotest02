@@ -2,10 +2,13 @@ package com.redisdemo02.util;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -144,12 +147,29 @@ public class redisUtil {
      * <p>
      * 批量设置 key 的 faild 值
      * </p>
+     * 
      * @param key
      * @param maps
      */
     public void hPutAll(String key, Map<String, Object> maps) {
         temp.opsForHash().putAll(key, maps);
     }
+
+    public Map<Object, Object> hGetAll(String key) {
+        return temp.opsForHash().entries(key);
+    }
+
+    public Cursor<Entry<Object, Object>> hScan(String key, ScanOptions options) {
+        return temp.opsForHash().scan(key, options);
+    }
+
+    public Long hSize(String key){
+        return temp.opsForHash().size(key);
+    }
+
+    public Boolean hPutIfAbsent(String key, String hashKey, String value) {
+		return temp.opsForHash().putIfAbsent(key, hashKey, value);
+	}
 
     /**
      * 删除hash表中的值

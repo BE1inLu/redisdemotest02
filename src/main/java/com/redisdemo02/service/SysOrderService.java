@@ -1,6 +1,9 @@
 package com.redisdemo02.service;
 
 import com.redisdemo02.entity.SysOrder;
+
+import java.util.List;
+
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -12,5 +15,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2023-05-31
  */
 public interface SysOrderService extends IService<SysOrder> {
+
+    List<SysOrder> getOrderList();
+
+    void saveOrder(SysOrder order);
+
+    void removeOrder(int id);
+
+    void updateOrder(SysOrder order);
 
 }

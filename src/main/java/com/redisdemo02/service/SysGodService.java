@@ -1,6 +1,7 @@
 package com.redisdemo02.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.redisdemo02.entity.SysGod;
@@ -21,6 +22,36 @@ public interface SysGodService extends IService<SysGod> {
      * @return
      */
     List<SysGod> getGodList();
+
+    /**
+     * 获取商品 map
+     * 
+     * @return
+     */
+    List<Map<String, Object>> getGodMap();
+
+    /**
+     * 插入商品信息
+     * 
+     * @param god
+     */
+    void saveGodMap(SysGod god);
+
+    /**
+     * 移除商品信息
+     * 
+     * @param id
+     */
+    void removeGodMap(int id);
+
+    /**
+     * 更新商品信息
+     * 
+     * @param sysGod
+     */
+    void updateGodMap(SysGod sysGod);
+
+    void getGodItemByMap(int id);
 
     /**
      * 插入商品信息

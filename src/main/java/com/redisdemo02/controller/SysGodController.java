@@ -1,6 +1,7 @@
 package com.redisdemo02.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,28 +31,28 @@ public class SysGodController extends baseController {
     @SaCheckRole(value = { "ROLE_ADMIN", "ROLE_USER", "ROLE_SHOP" }, mode = SaMode.OR)
     public Result godList() {
         // 获取商品列表
-        List<SysGod> list = sysGodService.getGodList();
-        return Result.succ(list);
+        List<Map<String, Object>> godMap = sysGodService.getGodMap();
+        return Result.succ(godMap);
     }
 
     @SaCheckRole("ROLE_ADMIN")
     @GetMapping("/godSave")
     public Result save(@Validated @RequestBody SysGod sysGod) {
-        sysGodService.saveGod(sysGod);
-        return Result.succ(sysGod);
+        sysGodService.saveGodMap(sysGod);
+        return Result.succ("save succ");
     }
 
     @SaCheckRole("ROLE_ADMIN")
     @GetMapping("/godDelete")
     public Result delete(@RequestBody int id) {
-        sysGodService.removeGod(id);
+        sysGodService.removeGodMap(id);
         return Result.succ("delete god : " + id + " success");
     }
 
     @SaCheckRole("ROLE_ADMIN")
     @GetMapping("/godUpdate")
     public Result Update(@Validated @RequestBody SysGod sysGod) {
-        sysGodService.updateGod(sysGod);
+        sysGodService.updateGodMap(sysGod);
         return Result.succ("update succ");
     }
 
