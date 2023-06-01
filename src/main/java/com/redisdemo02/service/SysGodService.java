@@ -51,7 +51,7 @@ public interface SysGodService extends IService<SysGod> {
      */
     void updateGodMap(SysGod sysGod);
 
-    void getGodItemByMap(int id);
+    Map<String, Object> getGodItemByMap(int id);
 
     /**
      * 插入商品信息

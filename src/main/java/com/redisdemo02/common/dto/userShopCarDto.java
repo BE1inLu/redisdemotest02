@@ -4,7 +4,8 @@ import lombok.Data;
 
 @Data
 public class userShopCarDto {
-    int id;
-    String godName;
+
+    int godid;
+
     int num;
 }

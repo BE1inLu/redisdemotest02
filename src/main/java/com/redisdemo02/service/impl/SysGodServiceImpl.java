@@ -132,11 +132,9 @@ public class SysGodServiceImpl extends ServiceImpl<SysGodMapper, SysGod> impleme
     }
 
     @Override
-    public void getGodItemByMap(int id) {
-
+    public Map<String, Object> getGodItemByMap(int id) {
         Map<String, Object> localMap = (Map<String, Object>) (Object) redisUtil.hGetAll("GodMapId" + id);
-        
-
+        return localMap;
     }
 
 }

@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.redisdemo02.entity.SysGod;
 import com.redisdemo02.service.SysGodService;
+import com.redisdemo02.service.UserShopCarService;
 
 import cn.hutool.core.lang.Console;
 
@@ -14,6 +15,9 @@ class Redisdemo02ApplicationTests {
 
 	@Autowired
 	SysGodService sysGodService;
+
+	@Autowired
+	UserShopCarService userShopCarService;
 
 	private final SysGod testgod() {
 		SysGod god = new SysGod();
@@ -49,6 +53,22 @@ class Redisdemo02ApplicationTests {
 		SysGod god = testgod();
 		god.setGoodName("test-test");
 		sysGodService.updateGodMap(god);
+	}
+
+	@Test
+	void test05() {
+		Console.log(sysGodService.getGodItemByMap(3));
+		Console.log(sysGodService.getGodItemByMap(3).get("id"));
+	}
+
+	@Test
+	void test06() {
+		Console.log(userShopCarService.addShopCarItem(1, 3));
+	}
+
+	@Test
+	void test07() {
+		Console.log(userShopCarService.delShopCarItem(1, 3));
 	}
 
 }
