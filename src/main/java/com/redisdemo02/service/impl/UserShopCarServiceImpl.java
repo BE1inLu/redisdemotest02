@@ -28,8 +28,6 @@ public class UserShopCarServiceImpl implements UserShopCarService {
             return false;
 
         try { // 1,查询 redis god map
-            Map<String, Object> godItem = sysGodService.getGodItemByMap(godid);
-
             userShopCarDto usercar = new userShopCarDto();
             usercar.setGodid(godid);
             usercar.setNum(1);
@@ -62,14 +60,14 @@ public class UserShopCarServiceImpl implements UserShopCarService {
     @Override
     public boolean updateShopCarItem(int userid, userShopCarDto userShopCar) {
         Map<String, Object> saveShopCarMap = BeanUtil.beanToMap(userShopCar);
-        redisUtil.hPutAll("userCar:" + userid + userShopCar.getGodid(), saveShopCarMap);
+        redisUtil.hPutAll("userCar:" + userid, saveShopCarMap);
         return true;
     }
 
     @Override
     public Map<String, Object> readUserShopCar(int userid) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'readUserShopCar'");
+        Map<String, Object> localMap = (Map<String, Object>) (Object) redisUtil.hGetAll("userCar:" + userid);
+        return localMap;
     }
 
 }
