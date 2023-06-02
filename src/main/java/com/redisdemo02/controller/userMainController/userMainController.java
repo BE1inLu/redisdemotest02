@@ -79,12 +79,12 @@ public class userMainController {
         order.setStatu(1);
 
         // TODO:将订单信息推送到list
-
-
-
-        return Result.succ(MapUtil.builder().put("order", BeanUtil.beanToMap(order)).build());
-
         
+
+
+        return Result.succ(MapUtil.builder().put("order", BeanUtil.beanToMap(order)).put("userShopMap",testMap).build());
+
+
     }
 
 }
