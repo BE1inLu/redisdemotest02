@@ -12,11 +12,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.redisdemo02.entity.SysGod;
 import com.redisdemo02.mapper.SysGodMapper;
 import com.redisdemo02.service.SysGodService;
+import com.redisdemo02.util.castUtil;
 import com.redisdemo02.util.redisUtil;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Console;
-import cn.hutool.core.map.MapUtil;
 
 /**
  * <p>
@@ -42,7 +42,7 @@ public class SysGodServiceImpl extends ServiceImpl<SysGodMapper, SysGod> impleme
 
         try {
             if (redisUtil.get("godlist") != null) {
-                localGodList = (List<SysGod>) redisUtil.get("godlist");
+                localGodList = castUtil.cast(redisUtil.get("godlist"));
                 Console.log("redis 读取 godlist");
             } else {
                 localGodList = this.list();
@@ -92,7 +92,7 @@ public class SysGodServiceImpl extends ServiceImpl<SysGodMapper, SysGod> impleme
             Console.log("hsize:" + redisUtil.hSize("GodMapIndex"));
             Long i = redisUtil.hSize("GodMapIndex");
             for (Long j = (long) 1; j <= i; j++) {
-                listtestmap.add((Map<String, Object>) (Object) redisUtil.hGetAll("GodMapId" + j.toString()));
+                listtestmap.add(castUtil.cast(redisUtil.hGetAll("GodMapId" + j.toString())));
             }
         } else {
             List<Map<String, Object>> localGodMap = this.listMaps();
@@ -133,7 +133,7 @@ public class SysGodServiceImpl extends ServiceImpl<SysGodMapper, SysGod> impleme
 
     @Override
     public Map<String, Object> getGodItemByMap(int id) {
-        Map<String, Object> localMap = (Map<String, Object>) (Object) redisUtil.hGetAll("GodMapId" + id);
+        Map<String, Object> localMap = castUtil.cast(redisUtil.hGetAll("GodMapId" + id));
         return localMap;
     }
 

@@ -6,7 +6,9 @@
 	],
 	"settings": {
 		"java.configuration.updateBuildConfiguration": "interactive",
-		"java.debug.settings.console":"integratedTerminal",
+		"java.debug.settings.console": "integratedTerminal",
+		"code-runner.runInTerminal": true,
+		"java.compile.nullAnalysis.mode": "automatic",
 		
 	}
 }

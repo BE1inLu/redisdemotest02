@@ -3,6 +3,7 @@ package com.redisdemo02.service.impl;
 import com.redisdemo02.entity.SysOrder;
 import com.redisdemo02.mapper.SysOrderMapper;
 import com.redisdemo02.service.SysOrderService;
+import com.redisdemo02.util.castUtil;
 import com.redisdemo02.util.redisUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
@@ -30,7 +31,7 @@ public class SysOrderServiceImpl extends ServiceImpl<SysOrderMapper, SysOrder> i
         List<SysOrder> orderList;
         try {
             if (redisUtil.get("orderlist") != null) {
-                orderList = (List<SysOrder>) redisUtil.get("orderList");
+                orderList = castUtil.cast(redisUtil.get("orderList"));
             } else {
                 orderList = this.list();
                 redisUtil.set("orderList", orderList);

@@ -163,13 +163,13 @@ public class redisUtil {
         return temp.opsForHash().scan(key, options);
     }
 
-    public Long hSize(String key){
+    public Long hSize(String key) {
         return temp.opsForHash().size(key);
     }
 
     public Boolean hPutIfAbsent(String key, String hashKey, String value) {
-		return temp.opsForHash().putIfAbsent(key, hashKey, value);
-	}
+        return temp.opsForHash().putIfAbsent(key, hashKey, value);
+    }
 
     /**
      * 删除hash表中的值
@@ -208,4 +208,11 @@ public class redisUtil {
         }
     }
 
+    public Long listLeftPush(String key, Object item) {
+        return temp.opsForList().leftPush(key, item);
+    }
+
+    public Object lRightPop(String Key){
+        return temp.opsForList().rightPop(Key);
+    }
 }

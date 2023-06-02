@@ -11,13 +11,19 @@ import org.springframework.web.bind.annotation.RestController;
 import com.redisdemo02.Result.Result;
 import com.redisdemo02.entity.SysGod;
 import com.redisdemo02.entity.SysOrder;
+import com.redisdemo02.service.MessageService;
 import com.redisdemo02.service.SysGodService;
+import com.redisdemo02.service.SysOrderService;
 import com.redisdemo02.service.UserShopCarService;
+import com.redisdemo02.util.castUtil;
+import com.redisdemo02.util.redisUtil;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.map.MapUtil;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 public class userMainController {
 
@@ -27,7 +33,22 @@ public class userMainController {
     @Autowired
     SysGodService sysGodService;
 
-    // TODO:实现用户创建定单接口
+    @Autowired
+    SysOrderService sysOrderService;
+
+    @Autowired
+    MessageService messageService;
+
+    @Autowired
+    redisUtil redisUtil;
+
+    /**
+     * 创建订单
+     * 
+     * TODO：增加鉴权
+     * 
+     * @return
+     */
     @GetMapping("/userCreateOperater")
     public Result CoreateOperater() {
 
@@ -78,13 +99,50 @@ public class userMainController {
 
         order.setStatu(1);
 
-        // TODO:将订单信息推送到list
-        
+        Map<String, Object> orderMap = BeanUtil.beanToMap(order);
 
+        // 写入redis hashmap
+        redisUtil.hPutAll("OrderMapid:" + order.getId(), orderMap);
 
-        return Result.succ(MapUtil.builder().put("order", BeanUtil.beanToMap(order)).put("userShopMap",testMap).build());
+        // 写入队列
+        Long listnum = messageService.sendMessage(order);
+        log.info("listnum:" + listnum);
 
+        // 写入持久层
+        sysOrderService.save(order);
 
+        return Result
+                .succ(MapUtil.builder()
+                        .put("order", BeanUtil.beanToMap(order))
+                        .put("userShopMap", testMap)
+                        .build());
+    }
+
+    @GetMapping("/checkorder")
+    public Result checkorder(int orderid) {
+        // Map<String, Object> localMap = (Map<String, Object>) (Object)
+        // redisUtil.hGetAll("OrderMapid:" + orderid);
+        Map<String, Object> localMap = castUtil.cast(redisUtil.hGetAll("OrderMapid:" + orderid));
+        log.info(localMap.toString());
+        return Result.succ(MapUtil.builder()
+                .put("map", localMap)
+                .build());
+    }
+
+    @GetMapping("/endorder")
+    public Result endorder(int orderid, int statu) {
+
+        Map<String, Object> localMap = castUtil.cast(redisUtil.hGetAll("OrderMapid:" + orderid));
+
+        SysOrder order = BeanUtil.fillBeanWithMapIgnoreCase(localMap, new SysOrder(), false);
+
+        order.setStatu(3);
+
+        sysOrderService.save(order);
+
+        redisUtil.del("OrderMapid:" + orderid);
+
+        return Result.succ("succ endorder");
     }
 
 }

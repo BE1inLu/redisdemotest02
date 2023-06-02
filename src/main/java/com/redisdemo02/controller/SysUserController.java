@@ -13,7 +13,7 @@ import cn.dev33.satoken.annotation.SaMode;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author enluba
@@ -28,12 +28,12 @@ public class SysUserController {
 
     /**
      * 获取用户列表
+     * 
      * @return
      */
-    @SaCheckRole(value = {"ROLE_ADMIN","ROLE_USER","ROLE_SHOP"},mode = SaMode.OR)
+    @SaCheckRole(value = { "ROLE_ADMIN", "ROLE_USER", "ROLE_SHOP" }, mode = SaMode.OR)
     @GetMapping("/getlist")
-    public Result getlist(){
-        
+    public Result getlist() {
         return Result.succ(sysUserService.list());
     }
 

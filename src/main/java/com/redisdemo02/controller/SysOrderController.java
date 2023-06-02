@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author enluba
@@ -14,5 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/sysOrder")
 public class SysOrderController {
+
+    // TODO:管理员权限，定单crud接口
 
 }

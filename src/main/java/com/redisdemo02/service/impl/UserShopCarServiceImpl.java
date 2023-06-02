@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.redisdemo02.common.dto.userShopCarDto;
 import com.redisdemo02.service.SysGodService;
 import com.redisdemo02.service.UserShopCarService;
+import com.redisdemo02.util.castUtil;
 import com.redisdemo02.util.redisUtil;
 
 import cn.hutool.core.bean.BeanUtil;
@@ -66,7 +67,7 @@ public class UserShopCarServiceImpl implements UserShopCarService {
 
     @Override
     public Map<String, Object> readUserShopCar(int userid) {
-        Map<String, Object> localMap = (Map<String, Object>) (Object) redisUtil.hGetAll("userCar:" + userid);
+        Map<String, Object> localMap = castUtil.cast(redisUtil.hGetAll("userCar:" + userid));
         return localMap;
     }
 
