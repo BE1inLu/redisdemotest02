@@ -33,7 +33,7 @@ public class UserShopCarServiceImpl implements UserShopCarService {
             usercar.setGodid(godid);
             usercar.setNum(1);
 
-            redisUtil.hashmapset("userCar:" + userid, "" + usercar.getGodid(), usercar.getNum());
+            redisUtil.hashmapset("userCar:" + userid , "" + usercar.getGodid(), usercar.getNum());
 
             return true;
 
@@ -44,13 +44,13 @@ public class UserShopCarServiceImpl implements UserShopCarService {
     }
 
     @Override
-    public boolean delShopCarItem(int userid, int shopCarId) {
+    public boolean delShopCarItem(int userid, int godId) {
 
-        if (userid <= 0 && shopCarId <= 0)
+        if (userid <= 0 && godId <= 0)
             return false;
 
         try {
-            redisUtil.hashmapdel("userCar:" + userid, "" + shopCarId);
+            redisUtil.hashmapdel("userCar:" + userid, "" + godId);
             return true;
         } catch (Exception e) {
             e.printStackTrace();

@@ -156,7 +156,8 @@ public class redisUtil {
     }
 
     public Map<Object, Object> hGetAll(String key) {
-        return temp.opsForHash().entries(key);
+        Map<Object, Object> local = temp.opsForHash().entries(key);
+        return local.isEmpty() ? null : local;
     }
 
     public Cursor<Entry<Object, Object>> hScan(String key, ScanOptions options) {
@@ -212,7 +213,7 @@ public class redisUtil {
         return temp.opsForList().leftPush(key, item);
     }
 
-    public Object lRightPop(String Key){
+    public Object lRightPop(String Key) {
         return temp.opsForList().rightPop(Key);
     }
 }

@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.redisdemo02.entity.SysGod;
+import com.redisdemo02.entity.SysOrder;
 import com.redisdemo02.service.SysGodService;
+import com.redisdemo02.service.SysOrderService;
 import com.redisdemo02.service.UserShopCarService;
 
 import cn.hutool.core.lang.Console;
@@ -19,6 +21,9 @@ class Redisdemo02ApplicationTests {
 	@Autowired
 	UserShopCarService userShopCarService;
 
+	@Autowired
+	SysOrderService sysOrderService;
+
 	private final SysGod testgod() {
 		SysGod god = new SysGod();
 		god.setId(4);
@@ -28,13 +33,22 @@ class Redisdemo02ApplicationTests {
 		return god;
 	}
 
+	// private final SysOrder testorder() {
+	// SysOrder order = new SysOrder();
+	// order.setId(2);
+	// order.setUserid(1);
+	// order.setCost(12);
+	// order.setStatu(1);
+	// return order;
+	// }
+
 	@Test
 	void contextLoads() {
 	}
 
 	@Test
 	void test01() {
-		Console.log(sysGodService.getGodMap());
+		Console.log(sysGodService.getGodMapAll());
 	}
 
 	@Test
@@ -57,8 +71,8 @@ class Redisdemo02ApplicationTests {
 
 	@Test
 	void test05() {
-		Console.log(sysGodService.getGodItemByMap(3));
-		Console.log(sysGodService.getGodItemByMap(3).get("id"));
+		Console.log(sysGodService.getGodMapById(3));
+		Console.log(sysGodService.getGodMapById(3).get("id"));
 	}
 
 	@Test
@@ -69,6 +83,18 @@ class Redisdemo02ApplicationTests {
 	@Test
 	void test07() {
 		Console.log(userShopCarService.delShopCarItem(1, 3));
+	}
+
+	@Test
+	void test08() {
+		SysOrder ord = new SysOrder();
+		ord.setId(1);
+		Console.log(sysOrderService.getOrderMapByid(ord));
+	}
+
+	@Test
+	void test09() {
+		Console.log(sysOrderService.getOrderMapAll());
 	}
 
 }

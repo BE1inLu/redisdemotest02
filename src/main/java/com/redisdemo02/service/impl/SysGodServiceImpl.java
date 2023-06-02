@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.redisdemo02.entity.SysGod;
 import com.redisdemo02.mapper.SysGodMapper;
@@ -80,7 +81,7 @@ public class SysGodServiceImpl extends ServiceImpl<SysGodMapper, SysGod> impleme
     // ====map操作====
 
     @Override
-    public List<Map<String, Object>> getGodMap() {
+    public List<Map<String, Object>> getGodMapAll() {
         Map<String, Object> testmap = new HashMap<>();
         List<Map<String, Object>> listtestmap = new ArrayList<>();
 
@@ -110,6 +111,12 @@ public class SysGodServiceImpl extends ServiceImpl<SysGodMapper, SysGod> impleme
     @Override
     public void saveGodMap(SysGod god) {
         this.save(god);
+
+        if (god.getId() == null) {
+            SysGod localgod = this.getOne(new QueryWrapper<SysGod>().eq("goodName", god.getGoodName()));
+            god.setId(localgod.getId());
+        }
+
         Map<String, Object> godmap = BeanUtil.beanToMap(god);
         redisUtil.hashmapset("GodMapIndex", god.getId().toString(), "GodMapId" + god.getId());
         redisUtil.hPutAll("GodMapId" + god.getId(), godmap);
@@ -132,9 +139,33 @@ public class SysGodServiceImpl extends ServiceImpl<SysGodMapper, SysGod> impleme
     }
 
     @Override
-    public Map<String, Object> getGodItemByMap(int id) {
+    public Map<String, Object> getGodMapById(int id) {
         Map<String, Object> localMap = castUtil.cast(redisUtil.hGetAll("GodMapId" + id));
         return localMap;
+    }
+
+    @Override
+    public boolean subGodNum(SysGod sysGod) {
+
+        Map<String, Object> localgodmap = this.getGodMapById(sysGod.getId());
+
+        int localgodnum = (int) localgodmap.get("GodNum");
+
+        if (localgodnum - sysGod.getGodNum() < 0) {
+            throw new Error("库存为空");
+        }
+
+        localgodmap.replace("godNum", localgodnum - sysGod.getGodNum());
+
+        sysGod = BeanUtil.fillBeanWithMap(localgodmap, new SysGod(), false);
+
+        try {
+            this.updateGodMap(sysGod);
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
     }
 
 }

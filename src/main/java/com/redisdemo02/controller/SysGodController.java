@@ -31,7 +31,7 @@ public class SysGodController extends baseController {
     @SaCheckRole(value = { "ROLE_ADMIN", "ROLE_USER", "ROLE_SHOP" }, mode = SaMode.OR)
     public Result godList() {
         // 获取商品列表
-        List<Map<String, Object>> godMap = sysGodService.getGodMap();
+        List<Map<String, Object>> godMap = sysGodService.getGodMapAll();
         return Result.succ(godMap);
     }
 

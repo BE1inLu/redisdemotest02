@@ -28,7 +28,7 @@ public interface SysGodService extends IService<SysGod> {
      * 
      * @return
      */
-    List<Map<String, Object>> getGodMap();
+    List<Map<String, Object>> getGodMapAll();
 
     /**
      * 插入商品信息
@@ -51,7 +51,7 @@ public interface SysGodService extends IService<SysGod> {
      */
     void updateGodMap(SysGod sysGod);
 
-    Map<String, Object> getGodItemByMap(int id);
+    Map<String, Object> getGodMapById(int id);
 
     /**
      * 插入商品信息
@@ -73,5 +73,12 @@ public interface SysGodService extends IService<SysGod> {
      * @param sysGod
      */
     void updateGod(SysGod sysGod);
+
+    /**
+     * 商品减少
+     * @param sysGod
+     * @return
+     */
+    boolean subGodNum(SysGod sysGod);
 
 }

@@ -22,7 +22,7 @@ public interface UserShopCarService {
      * @param id
      * @return
      */
-    boolean delShopCarItem(int userid, int shopCarId);
+    boolean delShopCarItem(int userid, int godId);
 
     /**
      * 购物车Item修改
