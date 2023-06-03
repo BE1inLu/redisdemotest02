@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.redisdemo02.Result.Result;
@@ -22,6 +23,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Console;
 
 @RestController
+@RequestMapping("/shop")
 public class shopMainController extends baseController {
 
     @Autowired
@@ -42,7 +44,7 @@ public class shopMainController extends baseController {
     // 商户controller
 
     @SaCheckRole("ROLE_SHOP")
-    @GetMapping("/getOrderbyshop")
+    @GetMapping("/getorder")
     public Result getOrderByShop() {
 
         SysOrder order;
@@ -84,7 +86,7 @@ public class shopMainController extends baseController {
      * @return
      */
     @SaCheckRole("ROLE_SHOP")
-    @GetMapping("/switchOrderstatu")
+    @GetMapping("/switchorderstatu")
     public Result switchOrderstatu(int orderid) {
 
         Map<String, Object> localMap = castUtil.cast(redisUtil.hGetAll("OrderMapid:" + orderid));

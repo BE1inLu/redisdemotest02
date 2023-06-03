@@ -142,7 +142,7 @@ public class SysOrderServiceImpl extends ServiceImpl<SysOrderMapper, SysOrder> i
     @Override
     public void removeOrderMap(SysOrder order) {
         this.removeById(order.getId());
-        redisUtil.hashmapdel("orderMapId:" + order.getId(), "id", "statu", "userid", "cost");
+        redisUtil.hashmapdel("orderMapId:" + order.getId(), "userid","id", "statu", "userid", "cost");
         redisUtil.hashmapdel("orderMapIndex", order.getId());
         redisUtil.del("orderMapId:" + order.getId());
     }
