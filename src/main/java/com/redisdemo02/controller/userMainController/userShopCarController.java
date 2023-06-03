@@ -3,15 +3,12 @@ package com.redisdemo02.controller.userMainController;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.redisdemo02.Result.Result;
 import com.redisdemo02.controller.baseController;
-import com.redisdemo02.entity.SysGod;
 import com.redisdemo02.service.UserShopCarService;
 
 import cn.dev33.satoken.annotation.SaCheckRole;

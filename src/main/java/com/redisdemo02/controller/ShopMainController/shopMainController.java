@@ -14,11 +14,13 @@ import com.redisdemo02.entity.SysOrder;
 import com.redisdemo02.service.MessageService;
 import com.redisdemo02.service.SysGodService;
 import com.redisdemo02.service.SysOrderService;
+import com.redisdemo02.service.SysUserService;
 import com.redisdemo02.service.UserShopCarService;
 import com.redisdemo02.util.castUtil;
 import com.redisdemo02.util.redisUtil;
 
 import cn.dev33.satoken.annotation.SaCheckRole;
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Console;
 
@@ -37,6 +39,9 @@ public class shopMainController extends baseController {
 
     @Autowired
     SysOrderService sysOrderService;
+
+    @Autowired
+    SysUserService sysUserService;
 
     @Autowired
     redisUtil redisUtil;
@@ -89,6 +94,8 @@ public class shopMainController extends baseController {
     @GetMapping("/switchorderstatu")
     public Result switchOrderstatu(int orderid) {
 
+        int shopid = (Integer) StpUtil.getLoginId();
+
         Map<String, Object> localMap = castUtil.cast(redisUtil.hGetAll("OrderMapid:" + orderid));
 
         SysOrder order = BeanUtil.fillBeanWithMapIgnoreCase(localMap, new SysOrder(), false);
@@ -96,6 +103,8 @@ public class shopMainController extends baseController {
         order.setStatu(3);
 
         sysOrderService.updateOrderMapByRedis(order);
+
+        sysUserService.addUserCount(order.getUserid(), shopid, order.getCost());
 
         return Result.succ("switch statu succ");
     }

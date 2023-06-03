@@ -39,6 +39,28 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     }
 
+    @Override
+    public boolean addUserCount(int shopid,int userid, Integer cost) {
+
+        SysUser shop=this.getById(shopid);
+
+        SysUser user=this.getById(userid);
+
+        if(user.getCost()-shop.getCost()<0){
+            return false;
+        }
+
+        shop.setCost(shop.getCost()+cost);
+
+        user.setCost(user.getCost()-cost);
+
+        this.updateById(shop);
+        this.updateById(user);
+
+        return true;
+    }
+
+
     
 
 }

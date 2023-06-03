@@ -15,4 +15,6 @@ public interface SysUserService extends IService<SysUser> {
 
     SysUser checkUser(String username,String password);
 
+    boolean addUserCount(int shopid,int userid,Integer cost);
+
 }
