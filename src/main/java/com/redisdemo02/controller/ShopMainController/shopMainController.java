@@ -52,10 +52,10 @@ public class shopMainController extends baseController {
     @GetMapping("/getorder")
     public Result getOrderByShop() {
 
-        SysOrder order;
+        SysOrder order = new SysOrder();
         // 1,查看msglist状态
         try {
-            order = (SysOrder) messageService.getMessage();
+            order.setUserid((Integer) messageService.getMessage());
         } catch (Exception e) {
             return Result.succ("waitlist no order");
         }
@@ -63,6 +63,8 @@ public class shopMainController extends baseController {
         // 获取到订单后修改仓库信息
         // 获取用户购物车
         Map<String, Object> usercar = userShopCarService.readUserShopCar(order.getUserid());
+
+        Console.log("map:" + usercar);
 
         SysGod god = new SysGod();
 
@@ -94,13 +96,16 @@ public class shopMainController extends baseController {
     @GetMapping("/switchorderstatu")
     public Result switchOrderstatu(int orderid) {
 
-        int shopid = (Integer) StpUtil.getLoginId();
+        SysOrder ord = new SysOrder();
+        ord.setId(orderid);
+        int shopid = StpUtil.getLoginIdAsInt();
+        Map<String,Object> ordermap=sysOrderService.getOrderMapByid(ord);
 
-        Map<String, Object> localMap = castUtil.cast(redisUtil.hGetAll("OrderMapid:" + orderid));
-
-        SysOrder order = BeanUtil.fillBeanWithMapIgnoreCase(localMap, new SysOrder(), false);
+        SysOrder order = BeanUtil.fillBeanWithMapIgnoreCase(ordermap, new SysOrder(), false);
 
         order.setStatu(3);
+
+        Console.log(order);
 
         sysOrderService.updateOrderMapByRedis(order);
 

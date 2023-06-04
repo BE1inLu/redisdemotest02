@@ -23,6 +23,7 @@ import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.dev33.satoken.annotation.SaMode;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.lang.Console;
 import cn.hutool.core.map.MapUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -55,25 +56,16 @@ public class userMainController extends baseController {
     @GetMapping("/userCreateOperater")
     public Result CoreateOperater() {
 
-        // 1，创建订单id
-        // 2，读取用户购物车
-        // 3，订单信息返回
-        // 4，定单信息存储redis
-
         SysOrder order = new SysOrder();
 
-        order.setUserid((Integer) StpUtil.getTokenInfo().getLoginId());
+        order.setUserid(StpUtil.getLoginIdAsInt());
 
         Map<String, Object> usercar = userShopCarService.readUserShopCar(order.getUserid());
 
-        // 通过usercar来获取对应的商品键值对
-        // 通过key来查询goditemmap（key）
-        // 创建List<sysgod> 保存用户要购买的商品
-        // 创建sysgod，查询goditemmap的值写入，addcost，putlist
-        // list转map
-        // ...
+        Console.log("map:" + usercar);
 
-        List<SysGod> userShopCarGodList = new ArrayList<>();
+        // ....
+        List<Map<String, Object>> userShopCarGodList = new ArrayList<>();
 
         order.setCost(0);
 
@@ -94,23 +86,23 @@ public class userMainController extends baseController {
 
             order.setCost(order.getCost() + i);
 
-            userShopCarGodList.add(localgod);
+            userShopCarGodList.add(BeanUtil.beanToMap(localgod));
         });
 
         // 构建用户商品map
-        Map<String, Object> userShopCarMap = BeanUtil.beanToMap(userShopCarGodList);
+        // Map<String, Object> userShopCarMap = BeanUtil.beanToMap(userShopCarGodList);
 
         order.setStatu(1);
 
         sysOrderService.saveOrderByMap(order);
 
         // 写入队列
-        Long listnum = messageService.sendMessage(order);
+        Long listnum = messageService.sendMessage(order.getUserid());
         log.info("listnum:" + listnum);
 
         return Result.succ(MapUtil.builder()
                 .put("order", BeanUtil.beanToMap(order))
-                .put("userShopCarMap", userShopCarMap)
+                .put("userShopCarMap", userShopCarGodList)
                 .build());
     }
 
@@ -123,7 +115,7 @@ public class userMainController extends baseController {
     @SaCheckRole(value = { "ROLE_ADMIN", "ROLE_USER", "ROLE_SHOP" }, mode = SaMode.OR)
     @GetMapping("/checkorder")
     public Result checkorder(int orderid) {
-        Map<String, SysOrder> localMap;
+        Map<String, Object> localMap;
         SysOrder localorder = new SysOrder();
         localorder.setId(orderid);
         localMap = sysOrderService.getOrderMapByid(localorder);
@@ -144,7 +136,10 @@ public class userMainController extends baseController {
     @GetMapping("/endorder")
     public Result endOrder(int orderid) {
 
-        Map<String, Object> localMap = castUtil.cast(redisUtil.hGetAll("OrderMapid:" + orderid));
+        SysOrder ord = new SysOrder();
+        ord.setId(orderid);
+
+        Map<String, Object> localMap = sysOrderService.getOrderMapByid(ord);
 
         SysOrder order = BeanUtil.fillBeanWithMapIgnoreCase(localMap, new SysOrder(), false);
 

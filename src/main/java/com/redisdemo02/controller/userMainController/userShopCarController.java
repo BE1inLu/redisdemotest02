@@ -29,7 +29,7 @@ public class userShopCarController extends baseController {
     @GetMapping("/add")
     public Result shopCarAdd(int godid) {
 
-        int userid = (int) StpUtil.getLoginId();
+        int userid = StpUtil.getLoginIdAsInt();
 
         boolean bool = userShopCarService.addShopCarItem(userid, godid);
 
@@ -43,7 +43,7 @@ public class userShopCarController extends baseController {
     @GetMapping("/delitem")
     public Result delShopCarItem(int godid) {
 
-        int userid = (int) StpUtil.getLoginId();
+        int userid = StpUtil.getLoginIdAsInt();
 
         boolean bool = userShopCarService.delShopCarItem(userid, godid);
 
@@ -61,7 +61,7 @@ public class userShopCarController extends baseController {
     @GetMapping("/readlist")
     public Result readusershopcarlist() {
 
-        int userid = (int) StpUtil.getLoginId();
+        int userid = StpUtil.getLoginIdAsInt();
 
         Map<String, Object> usercarmap = userShopCarService.readUserShopCar(userid);
 

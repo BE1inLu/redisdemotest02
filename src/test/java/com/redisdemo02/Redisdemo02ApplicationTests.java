@@ -9,6 +9,7 @@ import com.redisdemo02.entity.SysOrder;
 import com.redisdemo02.service.SysGodService;
 import com.redisdemo02.service.SysOrderService;
 import com.redisdemo02.service.UserShopCarService;
+import com.redisdemo02.util.redisUtil;
 
 import cn.hutool.core.lang.Console;
 
@@ -23,6 +24,9 @@ class Redisdemo02ApplicationTests {
 
 	@Autowired
 	SysOrderService sysOrderService;
+
+	@Autowired
+	redisUtil redisUtil;
 
 	private final SysGod testgod() {
 		SysGod god = new SysGod();
@@ -95,6 +99,11 @@ class Redisdemo02ApplicationTests {
 	@Test
 	void test09() {
 		Console.log(sysOrderService.getOrderMapAll());
+	}
+
+	@Test
+	void test10(){
+		Console.log(redisUtil.hGetAll("userCar:" + 1));
 	}
 
 }

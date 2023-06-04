@@ -94,6 +94,7 @@ public class SysGodServiceImpl extends ServiceImpl<SysGodMapper, SysGod> impleme
             Long i = redisUtil.hSize("GodMapIndex");
             for (Long j = (long) 1; j <= i; j++) {
                 listtestmap.add(castUtil.cast(redisUtil.hGetAll("GodMapId" + j.toString())));
+
             }
         } else {
             List<Map<String, Object>> localGodMap = this.listMaps();
@@ -104,6 +105,7 @@ public class SysGodServiceImpl extends ServiceImpl<SysGodMapper, SysGod> impleme
                 redisUtil.hashmapset("GodMapIndex", testmap.get("id").toString(), "GodMapId" + testmap.get("id"));
                 redisUtil.hPutAll("GodMapId" + testmap.get("id"), testmap);
             });
+            return localGodMap;
         }
         return listtestmap;
     }
@@ -149,7 +151,13 @@ public class SysGodServiceImpl extends ServiceImpl<SysGodMapper, SysGod> impleme
 
         Map<String, Object> localgodmap = this.getGodMapById(sysGod.getId());
 
-        int localgodnum = (int) localgodmap.get("GodNum");
+        Console.log(localgodmap);
+
+        SysGod god = BeanUtil.fillBeanWithMap(localgodmap, new SysGod(), false);
+
+        Console.log("godnum:" + god.getGodNum());
+
+        int localgodnum = god.getGodNum();
 
         if (localgodnum - sysGod.getGodNum() < 0) {
             throw new Error("库存为空");

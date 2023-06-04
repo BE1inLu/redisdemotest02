@@ -32,7 +32,7 @@ public interface SysOrderService extends IService<SysOrder> {
      * @param order
      * @return
      */
-    Map<String, SysOrder> getOrderMapByid(SysOrder order);
+    Map<String, Object> getOrderMapByid(SysOrder order);
 
     /**
      * 获取所有order信息

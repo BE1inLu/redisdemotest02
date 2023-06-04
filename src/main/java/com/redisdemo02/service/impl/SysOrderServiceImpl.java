@@ -71,7 +71,7 @@ public class SysOrderServiceImpl extends ServiceImpl<SysOrderMapper, SysOrder> i
     }
 
     @Override
-    public Map<String, SysOrder> getOrderMapByid(SysOrder order) {
+    public Map<String, Object> getOrderMapByid(SysOrder order) {
 
         int orderid = order.getId();
 
@@ -81,7 +81,7 @@ public class SysOrderServiceImpl extends ServiceImpl<SysOrderMapper, SysOrder> i
 
         // 查询 redis 库
         if (redisUtil.hGetAll("orderMapId:" + order.getId()) != null) {
-            listmap = castUtil.cast(redisUtil.hGetAll("orderMapId:" + order.getId()));
+            localMap = castUtil.cast(redisUtil.hGetAll("orderMapId:" + order.getId()));
         } else {
             // 查询sql库并写入 redis
             order = this.getOne(new QueryWrapper<SysOrder>().eq("id", orderid));
@@ -90,7 +90,7 @@ public class SysOrderServiceImpl extends ServiceImpl<SysOrderMapper, SysOrder> i
             order = BeanUtil.fillBeanWithMap(listmap, new SysOrder(), false);
             redisUtil.hPutAll("orderMapId:" + order.getId(), localMap);
         }
-        return listmap;
+        return localMap;
     }
 
     @Override
